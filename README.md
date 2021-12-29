@@ -10,12 +10,29 @@
 <br>
 <br>
 
-## What is SML?
+## 🚀  What is SML?
+
+<p align="center">
+  <img src="https://github.com/elfinlas/SML/blob/main/etc/img/sml_icon.png" alt="text" width="200" height="200" />  
+</p> 
 
 <br>
 
 > 즐겨찾기 관리 프로그램
 
+## 🖥  What to make?
+
+* Electron 
+* Bootstrap5
+* SQLite
+* Cheerio
+* Sweetalert2
+* Etc..
+
 <br>
 
-* 자세한 설명은 [Wiki](https://github.com/elfinlas/SML/wiki) 문서를 참고
+## 📕  기능 및 메뉴얼
+
+[Wiki](https://github.com/elfinlas/SML/wiki) 문서를 참고
+
+
