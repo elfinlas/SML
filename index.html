@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>[SML] Save My Link</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css" />
+
+    <link rel="stylesheet" href="./node_modules/choices.js/public/assets/styles/choices.min.css" />
+
+</head>
+
+<body>
+
+    <!-- Nav Menu-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+        <div class="container-fluid">
+            <a href="javascript:click4SML()" class="navbar-brand btn-lg" style="margin-left: 10px;">Save My Link</a>
+        </div>
+
+        <form class="d-flex">
+            <!-- Menu -->
+            <ul class=" navbar-nav">
+                <li class="dropdown">
+                    <button class="btn btn-danger dropdown-toggle" id="systemMenuBt" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        시스템 설정
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="systemMenuBt">
+                        <li><a class="dropdown-item disabled" href="javascript:click4Help()" tabindex="-1"
+                                aria-disabled="true">[데이터 관리]</a>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <!--  -->
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="기존 데이터를 백업 합니다.">
+                            <a class="dropdown-item" href="javascript:makeRestoreDate()">데이터 백업</a>
+                        </li>
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="백업 데이터로 복원 합니다.">
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                data-bs-target="#restoreDataModal">데이터
+                                복원</a>
+                        </li>
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="저장된 데이터를 초기화 합니다.">
+                            <a class="dropdown-item" href="javascript:resetAllData()">데이터 초기화</a>
+                        </li>
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                            <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">[기타]</a>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="javascript:click4Github()">개발자 Github</a></li>
+                        <li><a class="dropdown-item" href="javascript:click4AppInfo()">앱 정보</a></li>
+                        <li><a class="dropdown-item" href="javascript:click4Quit()">종료</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </form>
+    </nav>
+
+
+    <!-- contatiner -->
+    <div class="container-fluid">
+
+        <!--Menu - Dev Only -->
+        <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+            <div class="col">
+                <!-- <button type="button" class="btn btn-sm btn-outline-danger" onclick="click4Test()"
+                    style="width: 100%;">테스트
+                </button> -->
+
+                <h1 id="totalItemCnt" class="display-6">- 건</h1>
+
+            </div>
+            <div class="col text-end">
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                    data-bs-target="#addLinkModal" data-bs-send-type="LinkDataAdd" style="margin-top: 3px;"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-bookmark-plus" viewBox="0 0 16 16">
+                        <path
+                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
+                        <path
+                            d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z" />
+                    </svg>&nbsp; 링크
+                    추가</button>
+
+            </div>
+        </div>
+        <!--./row -->
+
+        <!--Table-->
+        <table id="linkTable" class="table" style="margin-top: 15px; ">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">이름</th>
+                    <th style="width: 25%;">링크</th>
+                    <th style="width: 25%;">태그</th>
+                    <th style="width: 15%;">날짜</th>
+                    <th style="width: 15%;">기타</th>
+                </tr>
+            </thead>
+            <tbody id="linkTableBody">
+            </tbody>
+        </table>
+
+        <!-- Search -->
+        <div id="search_field">
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <button id="search_type_bt" class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">이름</button>
+                        <ul class="dropdown-menu">
+                            <li><a id="search_dropdown_name" class="dropdown-item" href="#">이름</a></li>
+                            <li><a id="search_dropdown_tag" class="dropdown-item" href="#">태그</a></li>
+                        </ul>
+
+                        <input id="search_name_input" type="text" class="form-control"
+                            onkeypress="if(event.keyCode == 13) click4Search();"
+                            aria-label="Text input with dropdown button">
+                        <div id="search_name_tag" style="display: none; width: 70%;">
+                            <select id="search_link_tag_select" multiple>
+                                <!-- selectpicker form-control border-0 rounded shadow -->
+                                <!-- <option value="0" selected disabled>검색할 태그를 선택하세요.</option> -->
+                            </select>
+                        </div>
+                        <button class="btn btn-outline-secondary" type="button" id="search_bt"
+                            onclick="click4Search()">검색</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Page -->
+        <div id="page_field" style="margin-top: 10px;">
+            <nav aria-label="Page navigation example">
+                <ul id="pageItem" class="pagination justify-content-center">
+
+                </ul>
+            </nav>
+        </div> <!-- ./page field-->
+
+    </div> <!-- ./container-fluid -->
+
+
+    <!--Modal-->
+    <!-- Add Item Modal-->
+    <div class="modal fade" id="addLinkModal" tabindex="-1" aria-labelledby="addLinkModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLinkModalLabel">링크 등록 </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <br>
+
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="saveTitle" placeholder="1">
+                        <label for="saveTitle" class="opacity-50">저장할 링크 이름 </label>
+                    </div>
+
+                    <div class="mb-1">&nbsp;</div>
+
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="saveLink" placeholder="1">
+                        <label for="saveLink" class="opacity-50">저장할 링크 주소 </label>
+                    </div>
+
+                    <div class="mb-1">&nbsp;</div>
+
+                    <div class="mb-2" id=tag_filed>
+                        <!-- 태그 부분 -->
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-12"><label style="color: darkgray; margin-bottom: 10px;">태그</label></div>
+
+                            <div class="col-6">
+                                <select id="add_link_tag_select"
+                                    class="selectpicker form-control border-0 mb-1 px-4 py-4 rounded shadow">
+                                    <!-- <option value="0" selected disabled>저장된 태그를 선택하세요.</option> -->
+                                </select>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input id="add_link_tag_input" type="text" class="form-control form-control-sm"
+                                        onkeyup="addTag4Modal()" aria-label="Text input with dropdown button"
+                                        placeholder="태그를 입력하세요.">
+                                    <label for="add_link_tag_input" style="color: darkgray;">새로운 태그를 추가하세요.</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 태그 들어가는 부분 -->
+                    <div class="card" style="width: 100%; margin-top: 20px;">
+                        <div id="tagbox" class="card-body">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalSaveBt" onclick="clickModalBt4LinkDataSave()"
+                        class="btn btn-outline-success" style="width: 100%; margin-bottom: 15px;">저장</button>
+                    <button type="button" id="modalUpdateBt" onclick="clickModalBt4LinkDataUpdate()"
+                        class="btn btn-outline-success"
+                        style="width: 100%; margin-bottom: 15px; display:none;">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Restore Modal-->
+    <div class="modal fade" id="restoreDataModal" tabindex="-1" aria-labelledby="restoreDataModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restoreDataModalLabel">데이터 복원 </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="restoreJsonTextArea">복구 JSON</label>
+                        <textarea class="form-control" id="restoreJsonTextArea" rows="3"
+                            placeholder="복구할 Json 데이터를 입력하세요"></textarea>
+                    </div>
+
+                    <div class="mb-1">&nbsp;</div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalSaveBt" onclick="click4RestoreData()" class="btn btn-outline-success"
+                        style="width: 100%; margin-bottom: 15px;">복원</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Script -->
+    <script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Include Choices JavaScript -->
+    <script src="./node_modules/choices.js/public/assets/scripts/choices.min.js"></script>
+
+
+    <script src="./js/utils.js"></script>
+    <script src="./js/db.js"></script>
+    <script src="./js/backup_restore.js"></script>
+    <script src="./js/link_tag.js"></script>
+    <script src="./js/page.js"></script>
+
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
