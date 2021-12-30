@@ -1,8 +1,8 @@
 let configData;
 
 configData = {
-    // RUN_ENV: "DEV",
-    RUN_ENV: "PROD",
+    RUN_ENV: "DEV",
+    // RUN_ENV: "PROD",
 
     GITHUB: "https://github.com/elfinlas/SML",
 
